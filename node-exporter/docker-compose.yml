@@ -1,0 +1,32 @@
+---
+# node-exporter stack for Docker-based hosts in the fleet.
+# Deployed via Portainer GitOps to per-host endpoints (NTP, Scanner, ADS-B).
+# Reads SMART metrics from the host via textfile collector; requires the
+# ansible-homelab common role to have been applied first (installs
+# smartmontools + prometheus-node-exporter-collectors + timer).
+
+services:
+  node-exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: node-exporter
+    hostname: node-exporter
+    restart: unless-stopped
+    pid: host
+    command:
+      - '--path.rootfs=/host'
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc|var/lib/docker/.+)($$|/)'
+      - '--collector.hwmon'
+      - '--collector.thermal_zone'
+      - '--collector.systemd'
+      - '--collector.textfile.directory=/textfile-collector'
+    ports:
+      - "9100:9100"
+    volumes:
+      - /:/host:ro,rslave
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /var/lib/prometheus/node-exporter:/textfile-collector:ro
+      - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:ro
+    mem_limit: 128M
