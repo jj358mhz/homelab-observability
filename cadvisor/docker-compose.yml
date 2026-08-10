@@ -1,0 +1,31 @@
+---
+# cAdvisor stack for Docker-based hosts in the fleet.
+# Deployed via Portainer GitOps to per-host endpoints alongside node-exporter.
+# Publishes container-level metrics (CPU, memory, network, filesystem) on port 8082.
+#
+# Public-facing hosts should override HOST_BIND_ADDR to the LAN IP so port 8082
+# is not exposed via the public interface.
+
+services:
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    hostname: cadvisor
+    restart: unless-stopped
+    privileged: true
+    devices:
+      - /dev/kmsg
+    ports:
+      - "${HOST_BIND_ADDR:-0.0.0.0}:8082:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+      - /etc/machine-id:/etc/machine-id:ro
+    command:
+      - '--housekeeping_interval=30s'
+      - '--docker_only=true'
+      - '--store_container_labels=false'
+    mem_limit: 256M
