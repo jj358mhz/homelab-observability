@@ -3,7 +3,10 @@
 # Deployed via Portainer GitOps to per-host endpoints (NTP, Scanner, ADS-B).
 # Reads SMART metrics from the host via textfile collector; requires the
 # ansible-homelab common role to have been applied first (installs
-# smartmontools + prometheus-node-exporter-collectors + timer).
+# smartmontools + prometheus-node-exporter-collectors + timer + NVMe script).
+#
+# Public-facing hosts (Scanner) should override HOST_BIND_ADDR to the LAN IP
+# so port 9100 is not exposed via the public interface.
 
 services:
   node-exporter:
@@ -22,7 +25,7 @@ services:
       - '--collector.systemd'
       - '--collector.textfile.directory=/textfile-collector'
     ports:
-      - "9100:9100"
+      - "${HOST_BIND_ADDR:-0.0.0.0}:9100:9100"
     volumes:
       - /:/host:ro,rslave
       - /proc:/host/proc:ro
