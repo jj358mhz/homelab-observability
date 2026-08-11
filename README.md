@@ -32,7 +32,7 @@ on hosts where container-level visibility is wanted.
 - `raspberrypi-adsb` (192.168.1.249) — Pi 4B, SATA SSD — migration pending (currently in `git/adsb/monitoring/`)
 
 **cadvisor:**
-- `raspberrypi-ntp` (192.168.123.123) — Pi 5, NVMe — pending
+- `raspberrypi-ntp` (192.168.123.123) — Pi 5, NVMe — deployed
 - `raspberrypi-adsb` (192.168.1.249) — Pi 4B, SATA SSD — migration pending (currently in `git/adsb/monitoring/`)
 - `raspberrypi-scanner` (192.168.70.200) — Pi 5, NVMe, public-facing — deployed
 
