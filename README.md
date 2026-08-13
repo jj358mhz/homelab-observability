@@ -29,11 +29,11 @@ on hosts where container-level visibility is wanted.
 **node-exporter:**
 - `raspberrypi-ntp` (192.168.123.123) — Pi 5, NVMe — deployed
 - `raspberrypi-scanner` (192.168.70.200) — Pi 5, NVMe, public-facing — deployed
-- `raspberrypi-adsb` (192.168.1.249) — Pi 4B, SATA SSD — migration pending (currently in `git/adsb/monitoring/`)
+- `raspberrypi-adsb` (192.168.1.249) — Pi 4B, SATA SSD — deployed
 
 **cadvisor:**
 - `raspberrypi-ntp` (192.168.123.123) — Pi 5, NVMe — deployed
-- `raspberrypi-adsb` (192.168.1.249) — Pi 4B, SATA SSD — migration pending (currently in `git/adsb/monitoring/`)
+- `raspberrypi-adsb` (192.168.1.249) — Pi 4B, SATA SSD — deployed
 - `raspberrypi-scanner` (192.168.70.200) — Pi 5, NVMe, public-facing — deployed
 
 ## Security notes
