@@ -73,7 +73,9 @@ the Debian `prometheus-node-exporter` package via the `common` ansible role.
 
 3. **Open the firewall** (only if cross-VLAN):
    - UniFi zone-based policy: utility → host, TCP/9100 and TCP/8082
+     (plus 9001 if the host runs the Portainer agent rather than Edge)
    - Or a `ufw` rule on the host itself if host-level firewall is active
+   - Record the change in `homelab-network` (run `scripts/export.sh`, commit)
 
 4. **Add to Prometheus** in `homelab-utility/monitoring/prometheus/config/prometheus.yml`:
 ```yaml
@@ -127,8 +129,12 @@ ports never bind to the public interface.
 
 Scanner also runs `ufw` with a strict allowlist (22, 80, 443, 3000). The
 :9100 and :8082 ports work across VLANs because Docker's iptables rules
-bypass ufw for published ports. A UniFi zone-based firewall policy allows
-utility → scanner on those specific ports.
+bypass ufw for published ports. The UniFi zone-based firewall policy
+`Allow_Utility_to_DMZ` allows utility (192.168.1.248) → scanner
+(192.168.70.200) on 22 (SSH/Ansible), 8082 (cadvisor), 9100
+(node-exporter), and 9001 (standard Portainer agent port — likely stale,
+since the Edge Agent connects outbound and needs no inbound port). The live
+config is tracked in `homelab-network/snapshots/policies.json`.
 
 ### NVMe SMART on Pi 5
 
