@@ -132,9 +132,11 @@ Scanner also runs `ufw` with a strict allowlist (22, 80, 443, 3000). The
 bypass ufw for published ports. The UniFi zone-based firewall policy
 `Allow_Utility_to_DMZ` allows utility (192.168.1.248) → scanner
 (192.168.70.200) on 22 (SSH/Ansible), 8082 (cadvisor), 9100
-(node-exporter), and 9001 (standard Portainer agent port — likely stale,
-since the Edge Agent connects outbound and needs no inbound port). The live
-config is tracked in `homelab-network/snapshots/policies.json`.
+(node-exporter), and 9001 (Portainer agent — in active use; flow logs show
+utility polling scanner:9001). Every other Core host is blocked from the DMZ
+by `Block_Internal_to_DMZ`, so a new utility → scanner port must be added to
+that allow rule. The live config is tracked in
+`homelab-network/snapshots/policies.json`.
 
 ### NVMe SMART on Pi 5
 
